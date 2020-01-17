@@ -1,0 +1,41 @@
+%macro print 2
+	mov rax,01
+	mov rdi,01
+	mov rsi,%1
+	mov rdx,%2
+	syscall
+%endmacro
+section .data
+array db 0x10, 0xAB, 0x11, 0x98, 0x12
+pos db 0h
+ng db 0h
+cnt db 5h
+
+section .bss
+
+section .text
+global _start
+
+_start:
+	mov rsi,array
+	xor rax,rax
+label1:	mov al,byte[rsi]
+	bt rax,07
+	;js l1
+	jc l1
+	inc byte[pos]
+	jmp l2
+l1:	inc byte[ng]
+l2:	inc rsi
+	;add rsi,8
+	dec byte[cnt]
+	jnz label1
+
+	add byte[pos],30h
+	add byte[ng],30h
+	print pos,1
+	print ng,1
+
+	mov rax,60
+	mov rdi,00
+	syscall

@@ -1,0 +1,69 @@
+%macro print 2
+	mov rax,01
+	mov rdi,01
+	mov rsi,%1
+	mov rdx,%2
+	syscall
+%endmacro
+
+%macro exit 0
+	mov rax,60
+	mov rdi,00
+	syscall
+%endmacro
+
+section .data
+	
+	msg1 db 'Count of postitive numbers in array is : ',
+	len1 equ $-msg1
+	
+	msg2 db 'Count of negative numbers in array is : ',
+	len2 equ $-msg2
+	
+	nextLine db ' ',0xA
+	len equ $ -nextLine
+
+
+array db 0x10, 0xAB, 0x11, 0x98, 0xA
+pos db 0h
+neg: db 0h
+cnt db 5h
+cntr db 5h
+	
+section .text
+	global _start
+
+_start:
+	mov rsi,array
+	xor rax,rax      ;clears rax
+label1:
+	mov al,byte[rsi]
+	bt rax,07	;tests the 7th bit, i.e. the last bit, checks if it is SET i.e. it is 1
+	jc l1         	;jump if above condition is met
+	inc byte[pos]
+	jmp l2
+l1:	
+	inc byte[neg]
+l2:	
+	inc rsi
+	dec byte[cnt]
+	jnz label1
+
+	add byte[pos],30h
+	add byte[neg],30h
+	
+	print msg1,len1
+	print pos,1
+
+	print nextLine,len
+
+	print msg2,len2
+	print neg,1
+	
+	print nextLine,len
+
+	
+	xor rsi,rsi
+	mov rsi,array
+
+	exit
