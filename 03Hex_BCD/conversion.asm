@@ -1,4 +1,4 @@
-	;Number Conversion
+	;number Conversion
 	;Write 64 bit ALP to convert 4-digit Hex number into its equivalent
 	;BCD number and 5-digit BCD number into its equivalent HEX
 	;number. Make your program user friendly to accept the choice from
@@ -15,10 +15,10 @@ section .data
 		db "   Select one of the following ",0xA
 	lenMAIN:equ $-msgMAIN
 
-	msgHEX : db "Enter the HEX Number", 0x0A
+	msgHEX : db "Enter the HEX number", 0x0A
 	lenHEX : equ $-msgHEX
 
-	msgBCD : db "Enter the BCD Number", 0x0A
+	msgBCD : db "Enter the BCD number", 0x0A
 	lenBCD : equ $-msgBCD
 
 	cnt : db 0
