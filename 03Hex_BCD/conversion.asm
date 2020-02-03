@@ -1,11 +1,11 @@
-;Number Conversion
-;Write 64 bit ALP to convert 4-digit Hex number into its equivalent
-;BCD number and 5-digit BCD number into its equivalent HEX
-;number. Make your program user friendly to accept the choice from
-;user for:
-;a) HEX to BCD
-;b) BCD to HEX
-;c) EXIT
+	;Number Conversion
+	;Write 64 bit ALP to convert 4-digit Hex number into its equivalent
+	;BCD number and 5-digit BCD number into its equivalent HEX
+	;number. Make your program user friendly to accept the choice from
+	;user for:
+	;a) HEX to BCD
+	;b) BCD to HEX
+	;c) EXIT
 
 section .data
 	msgMAIN :  db "MENU",0xA
@@ -79,7 +79,8 @@ next2:
 	jnz print
 	scall 1,1,enter,1
 	jmp _start
-;**************ASCII to HEX (4 digit no )**************
+
+	;**************ASCII to HEX (4 digit no )**************
 A2H:
 	mov rsi,num
 	mov ax,00h
@@ -96,7 +97,8 @@ next:
 	dec byte[cnt]
 	jnz up1
 	ret
-;*******************DISPLAY***********************
+
+	;*******************DISPLAY***********************
 display:
 	mov rsi,result+4
 	mov byte[cnt],5
@@ -116,7 +118,8 @@ next4:
 	jnz calc
 	scall 1,1,result,5
 	ret
-;*******************BCD to HEX***********************	
+
+	;*******************BCD to HEX***********************	
 option2:
 	scall 1,1,msgBCD,lenBCD
 	scall 0,1,num1,9
@@ -141,9 +144,8 @@ up4:
 	jmp _start	
 
 
-;*******************EXIT**************************
-
+	;*******************EXIT**************************
 exit:
 	mov rax,60
 	mov rdi,0
-	syscall	
+	syscall
