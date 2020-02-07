@@ -1,151 +1,188 @@
-	;number Conversion
-	;Write 64 bit ALP to convert 4-digit Hex number into its equivalent
-	;BCD number and 5-digit BCD number into its equivalent HEX
-	;number. Make your program user friendly to accept the choice from
-	;user for:
-	;a) HEX to BCD
-	;b) BCD to HEX
-	;c) EXIT
+;number Conversion
+;Write 64 bit ALP to convert 4-digit Hex number into its equivalent
+;BCD number and 5-digit BCD number into its equivalent HEX
+;number. Make your program user friendly to accept the choice from
+;user for:
+;a) HEX to BCD
+;b) BCD to HEX
+;c) EXIT
+
+%macro print 2
+	mov rax,01
+	mov rdi,01
+	mov rsi,%1
+	mov rdx,%2
+	syscall
+%endmacro
+
+%macro read 2
+	mov rax,00
+	mov rdi,00
+	mov rsi,%1
+	mov rdx,%2
+	syscall
+%endmacro
 
 section .data
-	msgMAIN :  db "MENU",0xA
-		db "1. HEX to BCD", 0x0A
-		db "2. BCD to HEX", 0x0A
-		db "3. EXIT",0x0A
-		db "   Select one of the following ",0xA
-	lenMAIN:equ $-msgMAIN
+	option1: db "Press 1: HEX to BCD"
+	lenOption1: equ $-option1
 
-	msgHEX : db "Enter the HEX number", 0x0A
-	lenHEX : equ $-msgHEX
+	option2: db "Press 2: BCD to HEX"
+	lenOption2: equ $-option2
 
-	msgBCD : db "Enter the BCD number", 0x0A
-	lenBCD : equ $-msgBCD
+	option3: db "Press 3: Exit"
+	lenOption3: equ $-option3
 
-	cnt : db 0
-	enter : db 0xA
+	request: db "Enter Choice: "
+	lenRequest: equ $-request
+
+	req1: db "Enter HEX: "
+	lenReq1: equ $-req1
+
+	req2: db "Enter BCD: "
+	lenReq2: equ $-req2
+
+	msg1: db "BCD Equivalent: ";
+	lenMsg1: equ $-msg1;
+
+	msg2: db "BCD Equivalent: ";
+	lenMsg2: equ $-msg2;
+
+	space: db " ";
+	newLine: db 10;
 
 section .bss
-	%macro scall 4         ;for scall 1,1,msg,len  --prints
-		mov rax, %1    ;for scall 0,1,msg,len  -- accepts
-		mov rdi, %2
-		mov rsi, %3
-		mov rdx, %4
-		syscall
-	%endmacro
-	choice: resb 2
-	num : resb 5
-	num1 : resb 9
-	ans : resb 1
-	result : resb 5
-	factor : resb 5
+	hex: resb 100;
+	inAscii: resb 16;
+	outAscii: resb 16;
+    digit: resb 1;
+	choice: resb 1;
+    count: resb 1;
+    unit: resd 1;
+    ten: resd 1;
 
 section .text
 	global _start
-_start:
-	scall 1,1,msgMAIN,lenMAIN
-	scall 0,1,choice,2
-	cmp byte[choice],31h
-	je option1
-	cmp byte[choice],32h
-	je option2
-	cmp byte[choice],33h
-	je exit
-	
-option1:
-	;***************HEX to BCD conversion***************
-	
-	scall 1,1,msgHEX,lenHEX
-	scall 0,1,num,5
-	call A2H
-	mov bx,0xA
-	mov byte[cnt],00
-up:
-	mov dx,00
-	div bx
-	push ax
-	inc byte[cnt]
-	cmp ax,00
-	jne up
-print:
-	pop ax
-	cmp ax,09h
-	jbe next2
-	add ax,07h
-next2:
-	add ax,30h
-	mov byte[ans],al
-	scall 1,1,ans,1	
-	dec byte[cnt]
-	jnz print
-	scall 1,1,enter,1
-	jmp _start
+	_start:
+		menu:
+        print newLine,1;
+		print option1,lenOption1;
+		print newLine,1;
+		print option2,lenOption2;
+		print newLine,1;
+		print option3,lenOption3;
+		print newLine,1;
 
-	;**************ASCII to HEX (4 digit no )**************
-A2H:
-	mov rsi,num
-	mov ax,00h
-	mov byte[cnt],04h
-up1:	rol ax,04
-	mov bl,byte[rsi]
-	cmp bl,39h
-	jbe next
-	sub bl,07h
-next:
-	sub bl,30h
-	add al,bl
-	inc rsi
-	dec byte[cnt]
-	jnz up1
-	ret
+		print request,lenRequest;
+		read choice,2;
 
-	;*******************DISPLAY***********************
-display:
-	mov rsi,result+4
-	mov byte[cnt],5
-calc:
-	mov cl,00h
-	mov cl,bl
-	and cl,0x0F
-	cmp cl,09h
-	jbe next4
-	add cl,007h
-next4:
-	add cl,30h
-	mov byte[rsi],cl
-	ror ebx,4
-	dec rsi
-	dec byte[cnt]
-	jnz calc
-	scall 1,1,result,5
-	ret
+		cmp byte[choice],31h;
+		je label1;
 
-	;*******************BCD to HEX***********************	
-option2:
-	scall 1,1,msgBCD,lenBCD
-	scall 0,1,num1,9
-	mov rsi,num1+7
-	mov byte[cnt],05
-	mov ebx,00h
-	mov dword[factor],1
-up4:
-	mov eax,0h
-	mov al,byte[rsi]
-	sub al,30h
-	mul dword[factor]
-	add ebx,eax
-	mov ax,0x0A
-	mul dword[factor]
-	mov dword[factor],eax
-	dec rsi
-	dec byte[cnt]
-	jnz up4
-	call display
-	scall 1,1,enter,1
-	jmp _start	
+		cmp byte[choice],32h;
+		je label2;
+
+		exit:
+		mov rax,60;
+		mov rsi,00;
+		syscall;
+
+	    label1:
+    		print newLine,1;
+    		print req1,lenReq1;
+    		read inAscii,10
+            print msg1,lenMsg1;
+    		call _AsciiToHex;     //hex in RAX
+
+            ;//Hex To BCD
+            xor rdx,rdx;
+            mov rbx,10d;
+            push rbx;   //to flag the end of the stack
+
+            pushDigits:
+            div rbx;
+            push rdx;
+            xor rdx,rdx;
+            add rax,0h;
+            jnz pushDigits;
+
+            popDigits:
+            xor rbx,rbx;
+            pop rbx;
+
+            cmp rbx,10d
+            je endOfStack;
+
+            add rbx,30h;
+            mov [digit],rbx;
+            print digit,1;
+            jmp popDigits;
+
+            endOfStack:
+            print newLine,1;
+            jmp menu;
+        ;end of label1
 
 
-	;*******************EXIT**************************
-exit:
-	mov rax,60
-	mov rdi,0
-	syscall
+
+	label2:
+            print newLine,1;
+            print req2,lenReq2;
+            read inAscii,10;
+            call _AsciiToHex;
+            mov qword[unit],1d;
+            mov byte[ten],10d;
+            mov rbx,10h
+            xor rcx,rcx;
+
+           multiply:
+            xor rdx,rdx;
+            div rbx;
+            push rax;
+
+            mov rax,rdx;
+            mul dword[unit];
+            add rcx,rax;
+            xor rax,rax;
+            mov eax,dword[unit];
+            mul dword[ten];
+            mov dword[unit],eax;
+
+            pop rax;
+            add rax,0h;
+            jnz multiply;
+
+            mov rax,rcx;
+            call _HexToAscii;
+            print msg2,lenMsg2;
+            print outAscii,16;
+            print newLine,1
+
+            jmp menu;
+        ;end of label2
+
+
+_AsciiToHex:;		//ASCII in inAscii ----> HEX in RAX
+	mov rsi,inAscii;
+    xor rax,rax;
+    begin1:
+    cmp byte[rsi],0xA;	//Compare With New Line
+    je done;
+    rol rax,04d;
+    mov bl,byte[rsi];
+    cmp bl,39h;
+    jbe sub30
+    sub bl,07h;
+    sub30:
+    sub bl,30h;
+    add al,bl;
+    inc rsi;
+    jmp begin1;
+
+    done:
+    ret
+
+
+_HexToAscii:;		// HEX in RAX -----> ASCII in outAscii
+    mov rsi,outAscii+15d;
+    mov rcx,16d

@@ -16,8 +16,8 @@
 %endmacro
 
 section.data
-	msg1 : db "Enter one number",0xA
+	msg1 : db "Enter first number",0xA
 	len1 : equ $-msg1
 
-	msg2 : db "Enter two number",0xA
+	msg2 : db "Enter second number",0xA
 	len2 : equ $-msg2
