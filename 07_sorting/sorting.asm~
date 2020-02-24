@@ -2,11 +2,11 @@
 ;reading the input from the text file and writing back the result to the same file
 
 %macro mymacro 4
-		mov rax,%1
-		mov rdi,%2
-		mov rsi,%3
-		mov rdx,%4
-		syscall
+	mov rax,%1
+	mov rdi,%2
+	mov rsi,%3
+	mov rdx,%4
+	syscall
 %endmacro
 
 section .data
@@ -136,10 +136,3 @@ exit:
 	mov rax,60
 	mov rdi,0
 	syscall	
-	
-
-	
-	
-	
-
-

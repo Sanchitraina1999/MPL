@@ -17,7 +17,7 @@ section .data
 		    db "3. Exit",0xA
 	lenM: equ $-menu
 
-	fname: db 'a.txt',0 ;0 helps to find the file
+	fname: db 'file.txt',0 ;0 helps to find the file
 	warn: db "Sorry! File can't be opened",0xA
 	len: equ $-warn
 	success: db "File is opened successfully",0xA
@@ -136,10 +136,3 @@ exit:
 	mov rax,60
 	mov rdi,0
 	syscall	
-	
-
-	
-	
-	
-
-

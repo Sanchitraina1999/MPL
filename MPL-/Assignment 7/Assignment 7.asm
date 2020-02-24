@@ -31,8 +31,8 @@ cnt2: resb 2
 
 
 section .text
-global main
-main:
+global _start
+_start:
 
 ;***************OPEN THE FILE******************
 
