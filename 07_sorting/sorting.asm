@@ -49,10 +49,13 @@ down:
 	mov qword[len1],rax
 	mymacro 1,1,menu,lenM
 	mymacro 0,1,choice,2
+
 	cmp byte[choice],31h
 	je option1
+
 	cmp byte[choice],32h
 	je option2
+	
 	cmp byte[choice],33h
 	jae exit
 
