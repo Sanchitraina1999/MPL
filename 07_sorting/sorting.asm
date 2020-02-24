@@ -55,7 +55,7 @@ down:
 
 	cmp byte[choice],32h
 	je option2
-	
+
 	cmp byte[choice],33h
 	jae exit
 
@@ -74,7 +74,7 @@ option2:
 	jmp exit	
 
 
-	;_-_-_-_-_-_-_Procedure to sort the number in ascending order_-_-_-_-_-_-_
+	;_-_-_-_-_-_-_Procedure to sort in ascending order_-_-_-_-_-_-_
 
 ascending:	
 	mov byte[cnt1],5
@@ -96,12 +96,12 @@ up1:
 down1:
 	add rdi,2
 	dec byte[cnt2]
-	jnz up1
+		jnz up1
 	dec byte[cnt1]
-	jnz up2
+		jnz up2
 	ret
 
-	;_-_-_-_-_-_-_Procedure to sort the number in descending  order_-_-_-_-_-_-_
+	;_-_-_-_-_-_-_Procedure to sort in descending  order_-_-_-_-_-_-_
 descending :	
 	mov byte[cnt1],5
 up4:
@@ -122,9 +122,9 @@ up3:
 down3:
 	add rdi,2
 	dec byte[cnt2]
-	jnz up3
+		jnz up3
 	dec byte[cnt1]
-	jnz up4
+		jnz up4
 	ret
 	
 	
@@ -135,7 +135,7 @@ exit:
 	mov rax,3
 	mov rdi,[fd_in]
 
-
+	;_-_-_-_-_-_-EXIT_-_-_-_-_-_-_
 	mov rax,60
 	mov rdi,0
 	syscall	
