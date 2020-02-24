@@ -38,10 +38,11 @@ _start:
 	;_-_-_-_-_-OPENING the FILE_-_-_-_-_
 
 	mymacro 2,fname,2,0777
-	mov qword[fd_in],rax
-	BT rax,63
+	mov qword[fd_in],rax ; RAX contains file descriptor value
+	BT rax,63	;63rd bit is +ve(0) if file is successfull opened else it is -ve (1)
+            	;Here we are checking for MSB if MSB is 1 that means -ve and if MSB is 0 that means +ve 
 	jnc down
-	mymacro 1,1,warn,len
+	mymacro 1,1,warn,le xn
 	jmp exit
 down:
 	mymacro 1,1,success,lens
