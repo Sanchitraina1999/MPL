@@ -11,7 +11,7 @@
 
 section .data
 
-	menu: msg db "********MENU********",0xA
+	menu: db "********MENU********",0xA
 		    db "1. Sort in Increasing order",0xA
 		    db "2. Sort in Decreasing order",0xA
 		    db "3. Exit",0xA
@@ -31,7 +31,7 @@ section .bss
 	cnt1: resb 2
 	cnt2: resb 2
 
-section. text
+section .text
 	global _start
 
 _start:
