@@ -40,8 +40,8 @@ _start:
 	mymacro 2,fname,2,0777
 	mov qword[fd_in],rax ; RAX contains file descriptor value
 	BT rax,63	;63rd bit is 0 if file is successfull opened else it is 1[set] 
-	jnc down 	; Jump if condition is met
-	mymacro 1,1,warn,le xn
+	jnc down 	; Jump if condition is em
+	mymacro 1,1,warn,len
 	jmp exit
 down:
 	mymacro 1,1,success,lens
@@ -49,14 +49,10 @@ down:
 	mov qword[len1],rax
 	mymacro 1,1,menu,lenM
 	mymacro 0,1,choice,2
-
 	cmp byte[choice],31h
 	je option1
-
 	cmp byte[choice],32h
-
 	je option2
-	
 	cmp byte[choice],33h
 	jae exit
 
