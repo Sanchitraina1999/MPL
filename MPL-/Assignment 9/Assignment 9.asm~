@@ -1,0 +1,24 @@
+section .data
+
+msg: db "The factorial of the entered number is: "
+len: equ $-msg
+
+section .bss
+
+fact: resb 5
+num: resb 2
+
+section .text
+
+global main
+main:
+pop rbx
+pop rbx
+pop rbx
+movzx cl,byte[rbx]
+sub cl,30H
+
+
+mov rax,60
+mov rdi,0
+syscall

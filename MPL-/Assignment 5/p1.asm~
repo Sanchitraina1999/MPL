@@ -1,0 +1,74 @@
+section .data
+
+global numbytes
+fname: db 'a.txt',0
+fd_in: dq 0x00
+numbytes: dq 0x00
+
+msg1: db "File opened succesfully",0x0A,0x0A
+len1: equ $-msg1
+
+msg2: db "Failed to open file",0x0A,0x0A
+len2: equ $-msg2
+
+msg: db "-----Character detector-----",0x0A
+        db "1. Number of spaces",0x0A
+        db "2. Number of line breaks",0x0A
+        db "3. Number of occurence of 'n'",0x0A
+        db "Enter your choice: "
+len: equ $-msg
+
+section .bss
+
+global buffer
+buffer: resb 1000
+
+choice: resb 2
+%macro mymacro 4
+mov rax,%1
+mov rdi,%2
+mov rsi,%3
+mov rdx,%4
+syscall
+%endmacro
+
+section .text
+extern spc,ent,occ
+global main
+main:
+mymacro 2,fname,2,0777
+mov qword[fd_in],rax
+bt rax,63
+jnc pt
+mymacro 1,1,msg2,len2
+jmp exit
+pt:
+mymacro 1,1,msg1,len1
+mymacro 0,[fd_in],buffer,1000
+mov qword[numbytes],rax
+mymacro 1,1,msg,len
+mymacro 0,1,choice,2
+cmp byte[choice],31H
+je spaces
+cmp byte[choice],32H
+je enter
+cmp byte[choice],33H
+je char
+
+spaces:
+call spc
+jmp exit
+
+enter:
+call ent
+jmp exit
+
+char:
+call occ
+
+
+exit:
+mov rax,60
+mov rdi,0
+syscall
+

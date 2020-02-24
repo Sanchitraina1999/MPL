@@ -1,0 +1,94 @@
+section .data
+
+typemsg: db "Typing contents of the file on terminal",0x0A
+lentype: equ $-typemsg
+
+copymsg: db "Copying contents from first file to second",0x0A
+lencopy: equ $-copymsg
+
+delmsg: db "Deleting the entered file name",0x0A
+lendel: equ $-delmsg
+
+redmsg: db "Reading contents from the second file post copying",0x0A
+lenred: equ $-redmsg
+
+section .bss
+fname: resb 10
+fname1: resb 10
+fd_in: resb 8
+buffer: resb 1000
+buffer2: resb 1000
+lim: resb 8
+
+%macro mymacro 4
+mov rax,%1
+mov rdi,%2
+mov rsi,%3
+mov rdx,%4
+syscall
+%endmacro
+
+
+
+
+section .text
+
+global main
+main:
+pop rbx
+pop rbx
+pop rbx
+cmp byte[rbx],'T'
+je typ
+cmp byte[rbx],'C'
+je cop
+typ:
+mymacro 1,1,typemsg,lentype
+pop rbx
+call filename
+mymacro 2,fname,2,0777
+mov qword[fd_in],rax
+mymacro 0,[fd_in],buffer,1000
+mov qword[lim],rax
+mymacro 1,1,buffer,1000
+jmp exit
+
+cop:
+mymacro 1,1,copymsg,lencopy
+pop rbx
+call filename
+mov rbx,qword[fname]
+mov qword[fname1],rbx
+mymacro 2,fname1,2,0777
+mov qword[fd_in],rax
+mymacro 0,[fd_in],buffer,1000
+mov qword[lim],rax
+mov rax,3
+mov rdi,[fd_in]
+syscall
+pop rbx
+call filename
+mymacro 2,fname,2,0777
+mov qword[fd_in],rax
+mymacro 1,[fd_in],buffer,qword[lim]
+mymacro 0,[fd_in],buffer2,1000
+mov qword[lim],rax
+mymacro 1,1,redmsg,lenred
+mymacro 1,1,buffer2,qword[lim]
+jmp exit
+
+filename:
+mov rsi,rbx
+mov rdi,fname
+up:
+cmp byte[rsi],0
+je down
+movsb
+jmp up
+down:
+ret
+
+exit:
+mov rax,60
+mov rdi,0
+syscall

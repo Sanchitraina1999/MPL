@@ -1,0 +1,82 @@
+section .data
+extern numbytes
+count: db 00
+
+msg1: db "Number of spaces are: "
+len1: equ $-msg1
+
+msg2: db "Number of line breaks are: "
+len2: equ $-msg2
+
+msg3: db "Number of character 'n' are: "
+len3: equ $-msg3
+
+
+
+section .bss
+extern buffer
+%macro mymacro 4
+mov rax,%1
+mov rdi,%2
+mov rsi,%3
+mov rdx,%4
+syscall
+%endmacro
+
+
+section .text
+global spc,ent,occ
+global main1
+main1:
+
+spc:
+mov rsi,buffer
+mov byte[count],0
+up:
+cmp byte[rsi],20
+jne spc1
+inc byte[count]
+spc1:
+inc rsi
+dec byte[numbytes]
+jnz up
+mymacro 1,1,msg1,len1
+mymacro 1,1,count,1
+ret
+
+ent:
+mov rsi,buffer
+mov byte[count],0
+up2:
+cmp byte[rsi],0xA
+jne ent1
+inc byte[count]
+ent1:
+inc rsi
+dec byte[numbytes]
+jnz up2
+mymacro 1,1,msg2,len2
+mymacro 1,1,count,1
+ret
+
+occ:
+mov rsi,buffer
+mov byte[count],0
+up3:
+cmp byte[rsi],0x6E
+jne occ1
+inc byte[count]
+occ1:
+inc rsi
+dec byte[numbytes]
+jnz up3
+mymacro 1,1,msg3,len3
+mymacro 1,1,count,1
+ret
+
+mov rax,60
+mov rdi,0
+syscall
+
+h2a:
+mov 

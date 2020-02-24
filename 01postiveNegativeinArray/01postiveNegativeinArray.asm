@@ -24,7 +24,7 @@ section .data
 	len equ $ -nextLine
 
 
-array db 0x10, 0xAB, 0x11, 0x98, 0xA
+array db 0x10, 0xAB, 0x11, 0x98, 0xA 		;0xA will be taken as 0x0A
 pos db 0h
 neg: db 0h
 cnt db 5h
@@ -61,9 +61,5 @@ l2:
 	print neg,1
 	
 	print nextLine,len
-
-	
-	xor rsi,rsi
-	mov rsi,array
 
 	exit

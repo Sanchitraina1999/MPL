@@ -48,7 +48,7 @@ section .bss
 	mov rdi,1
 	mov rsi,%1
 	mov rdx,%2
-	Syscall
+	syscall
 %endmacro
 
 %macro read 2
@@ -56,7 +56,7 @@ section .bss
 	mov rdi,1
 	mov rsi,%1
 	mov rdx,%2
-	Syscall
+	syscall
 %endmacro
 
 
