@@ -7,20 +7,22 @@
 %endmacro
 
 section .data
-warn : db "File is not opened successfully",0x0A
-lenw : equ $-warn
+	warn : db "File is not opened successfully",0x0A
+	lenw : equ $-warn
 
+	copiedmessage db "Contents Copied",10
+	lencopied equ $-copiedmessage
 
 section .bss
-fname : resb 10
-fname1 : resb 10
-fd_in1:resb 8
-fd_in2:resb 8
-len1: resb 8
-buffer : resb 100
+	fname : resb 10
+	fname1 : resb 10
+	fd_in1:resb 8
+	fd_in2:resb 8
+	len1: resb 8
+	buffer : resb 100
 
 section .text
-global _start
+	global _start
 
 _start:
 
@@ -32,7 +34,7 @@ _start:
 	cmp byte[rbx],'T'
 	je type
 	cmp byte[rbx],'C'
-	je copy
+	je _printcopiedmessage
 	cmp byte[rbx],'D'
 	je delete
 
@@ -69,7 +71,8 @@ down1:
 	;CLOSE THE FILE		
 	mov rax,3
 	mov rdi,[fd_in1]
-	syscall
+	syscall	
+
 	jmp exit
 
 
@@ -167,6 +170,9 @@ up4:
 down4:
 	ret
 ;************EXIT********************
+
+_printcopiedmessage:
+	scall 1,1,copiedmessage,lencopied
 
 exit:
 	mov rax,60
