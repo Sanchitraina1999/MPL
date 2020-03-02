@@ -65,5 +65,5 @@ next1:
 	inc rsi
 	dec byte[cnt]
 	jnz up
-	scall 1,1,fact,4	;comment
+	scall 1,1,fact,4
 	ret	
