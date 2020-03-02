@@ -45,7 +45,7 @@ fact_proc:
 	call fact_proc
 	pop cx
 	mul cl
-	ret	
+	ret
 
 ;************HEX TO ASCII PROCEDURE************
 
